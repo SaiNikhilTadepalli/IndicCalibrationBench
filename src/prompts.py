@@ -30,3 +30,12 @@ For every question:
 2. Be extremely precise and accurate with regional names, species and cultural practices.
 3. Critically assess your own certainty. You must provide a confidence score between 0 and 100, indicating how likely you believe your answer is to be correct.
 """
+
+QUESTION_ANSWERING_TEMPLATE = """
+Question: {question}
+
+Please provide your answer followed by your confidence score (between 0 and 100) in the following format:
+
+Answer: [Your answer]
+Confidence: [Your confidence score]%
+"""
