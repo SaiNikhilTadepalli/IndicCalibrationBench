@@ -36,6 +36,7 @@ def get_record_to_sample() -> Callable[[dict[str, Any]], Sample]:
 
 def load_indic_multicultural_qa_dataset(file_path: str = LOCAL_DATASET_PATH) -> Dataset:
     """
-    Load the local CSV dataset of Indic multi-cultural QA pairs.
+    Load the local CSV dataset of Indic multi-cultural QA pairs and
+    apply the question-answering template to each sample.
     """
     return csv_dataset(csv_file=file_path, sample_fields=get_record_to_sample)
