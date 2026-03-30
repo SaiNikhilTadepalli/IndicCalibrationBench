@@ -9,6 +9,7 @@ from inspect_ai.scorer import (
     Scorer,
     Target,
     Value,
+    accuracy,
     metric,
     scorer,
 )
@@ -31,7 +32,9 @@ def ece_metric(n_bins: int = 10) -> Metric:
         for sample_score in scores:
             # Extract confidence and accuracy from metadata
             confidence = sample_score.score.metadata.get("confidence")
-            accuracy = 1.0 if sample_score.score.value == "CORRECT" else 0.0
+            accuracy = float(
+                sample_score.score.value
+            )  # 1.0 for correct, 0.0 for incorrect
 
             if confidence is not None:
                 # Normalise confidence score to [0, 1]
@@ -69,7 +72,7 @@ def ece_metric(n_bins: int = 10) -> Metric:
     return metric
 
 
-@scorer(metrics=[ece_metric(n_bins=10)])
+@scorer(metrics=[ece_metric(n_bins=10)], reducer=accuracy())
 def indic_calibration_scorer(judge_model: str | Model | None) -> Scorer:
     async def score(state: TaskState, target: Target) -> Score:
         # Resolve judge model
@@ -94,9 +97,9 @@ def indic_calibration_scorer(judge_model: str | Model | None) -> Scorer:
 
         # Parse "CORRECT" or "INCORRECT" from the judge model's output
         is_correct = (
-            "CORRECT"
+            1.0
             if "CORRECT" in completion.upper() and "INCORRECT" not in completion.upper()
-            else "INCORRECT"
+            else 0.0
         )
 
         # Extract confidence score from the original model output
