@@ -1,11 +1,12 @@
 import os
+import re
 from typing import Any, Callable
 
 from inspect_ai.dataset import Dataset, Sample, csv_dataset
 
 from inspect_evals.utils import create_stable_id
 
-from prompts import QUESTION_ANSWERING_TEMPLATE
+from prompts import CONFIDENCE_SCORE_REGEX, QUESTION_ANSWERING_TEMPLATE
 
 
 # Resolve local QA dataset path
@@ -40,3 +41,14 @@ def load_indic_multicultural_qa_dataset(file_path: str = LOCAL_DATASET_PATH) -> 
     apply the question-answering template to each sample.
     """
     return csv_dataset(csv_file=file_path, sample_fields=get_record_to_sample)
+
+
+def extract_confidence_score(model_response: str) -> int | None:
+    """Extract the confidence score from the model's question-answering response."""
+    match = re.search(CONFIDENCE_SCORE_REGEX, model_response)
+
+    if match:
+        confidence_score = int(match.group(1))
+        return min(max(confidence_score, 0), 100)  # Ensure score is between 0 and 100
+
+    return None  # Return None if Regex parsing fails
