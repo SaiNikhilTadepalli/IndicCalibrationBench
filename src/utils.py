@@ -40,7 +40,9 @@ def load_indic_multicultural_qa_dataset(file_path: str = LOCAL_DATASET_PATH) -> 
     Load the local CSV dataset of Indic multi-cultural QA pairs and
     apply the question-answering template to each sample.
     """
-    return csv_dataset(csv_file=file_path, sample_fields=get_record_to_sample)
+    return csv_dataset(
+        csv_file=file_path, sample_fields=get_record_to_sample(), encoding="utf-8-sig"
+    )
 
 
 def extract_confidence_score(model_response: str) -> int | None:
