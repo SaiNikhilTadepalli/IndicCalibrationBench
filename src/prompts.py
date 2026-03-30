@@ -39,3 +39,5 @@ Please provide your answer followed by your confidence score (between 0 and 100)
 Answer: [Your answer]
 Confidence: [Your confidence score]%
 """
+
+CONFIDENCE_SCORE_REGEX = r"(?:Confidence:\s*)?(\d{1,3})\s*%"
