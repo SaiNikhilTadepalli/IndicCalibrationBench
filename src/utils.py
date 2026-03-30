@@ -29,7 +29,7 @@ def get_record_to_sample() -> Callable[[dict[str, Any]], Sample]:
             input=apply_question_answering_template(question),
             target=record["Answer"],
             id=create_stable_id(record["Question"]),
-            metadata={"category": record["Category"]},
+            metadata={"raw_question": question, "category": record["Category"]},
         )
 
     return record_to_sample
